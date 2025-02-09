@@ -7,22 +7,29 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: inmuebledb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     volumes:
       - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
       - app_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
 
   backend:
     build: ./backend
     container_name: django_backend
     restart: always
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       DB_NAME: mydb
       DB_USER: user
@@ -36,6 +43,7 @@ services:
     networks:
       - app_network
     command: python manage.py runserver 0.0.0.0:8000  # Habilita recarga automática
+
 
   frontend:
     build: ./frontend

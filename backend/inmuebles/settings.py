@@ -80,9 +80,9 @@ WSGI_APPLICATION = 'inmuebles.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inmuebledb',
-        'USER': 'root',
-        'PASSWORD': 'root',
+        'NAME': 'mydb',
+        'USER': 'user',
+        'PASSWORD': 'password',
         'HOST': 'mysql',
         'PORT': '3306',
     }
